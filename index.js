@@ -32,8 +32,8 @@ app.get('/send', async (req, res) => {
     } else {
       res.status(500).send('PC is not connected.');
     }
-  } catch {
-    console.log("Error");
+  } catch(err) {
+    console.log(`Error: ${err}`);
   }
 });
 
