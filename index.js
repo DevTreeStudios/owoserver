@@ -20,7 +20,7 @@ wss.on('connection', (ws) => {
   });
 });
 
-app.get('/', async (req, res) => {
+app.get('/send', async (req, res) => {
   try {
     let message = req.body.message;
     
