@@ -29,16 +29,17 @@ app.get('/send', async (req, res) => {
     let message = req.body.message;
     
     if (pcSocket && pcSocket.readyState === WebSocket.OPEN) {
+      console.log('Sending Message to PC...');
       pcSocket.send(message);
       res.send('Message sent to PC!');
     } else {
+      console.log('PC not connected.');
       res.status(500).send('PC is not connected.');
     }
   } catch(err) {
     console.log(`Error: ${err}`);
+    res.send(`Error: ${err}`);
   }
-
-  res.send('Message Received!');
 });
 
 app.get('/', (req, res) => {
