@@ -14,14 +14,34 @@ const PORT = 3000;
 let pcSocket = null;
 
 wss.on('connection', (ws) => {
-  console.log('WebSocket client connected');
-
+  console.log('✅ WebSocket client connected');
   pcSocket = ws;
 
-  ws.on('close', () => {
-    console.log('WebSocket client disconnected');
-    pcSocket = null;
+  ws.isAlive = true;
+
+  ws.on('pong', () => {
+    ws.isAlive = true;
   });
+
+  ws.on('close', () => {
+    console.log('❌ WebSocket client disconnected');
+    pcSocket = null;
+    clearInterval(ws.keepAliveInterval);
+  });
+
+  ws.on('error', (err) => {
+    console.error('WebSocket error:', err);
+  });
+
+  ws.keepAliveInterval = setInterval(() => {
+    if (!ws.isAlive) {
+      console.log('❌ No pong received, terminating socket');
+      return ws.terminate();
+    }
+
+    ws.isAlive = false;
+    ws.ping();
+  }, 10000);
 });
 
 app.post('/send', async (req, res) => {
