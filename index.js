@@ -21,13 +21,17 @@ wss.on('connection', (ws) => {
 });
 
 app.get('/', async (req, res) => {
-  let message = req.body.message;
-  
-  if (pcSocket && pcSocket.readyState === WebSocket.OPEN) {
-    pcSocket.send(message);
-    res.send('Message sent to PC!');
-  } else {
-    res.status(500).send('PC is not connected.');
+  try {
+    let message = req.body.message;
+    
+    if (pcSocket && pcSocket.readyState === WebSocket.OPEN) {
+      pcSocket.send(message);
+      res.send('Message sent to PC!');
+    } else {
+      res.status(500).send('PC is not connected.');
+    }
+  } catch {
+    console.log("Error");
   }
 });
 
