@@ -35,6 +35,8 @@ app.get('/send', async (req, res) => {
   } catch(err) {
     console.log(`Error: ${err}`);
   }
+
+  res.send('Message Received!');
 });
 
 app.get('/', (req, res) => {
