@@ -1,11 +1,13 @@
 const WebSocket = require('ws');
 const express = require('express');
-const axios = require('axios');
+const http = require('http');
 const app = express();
 
-const wss = new WebSocket.Server({ port: 8080 });
+const server = http.createServer(app);
 
-const PORT = process.env.PORT || 3000;
+const wss = new WebSocket.Server({ server });
+
+const PORT = 3000;
 
 let pcSocket = null;
 
@@ -33,6 +35,10 @@ app.get('/send', async (req, res) => {
   } catch {
     console.log("Error");
   }
+});
+
+app.get('/', (req, res) => {
+  res.send('Web server running.');
 });
 
 app.listen(PORT, () => {
